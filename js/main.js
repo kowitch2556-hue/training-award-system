@@ -1,4 +1,4 @@
-// js/main.js - แก้ไขให้รองรับทั้ง 3 ฟอร์ม (Dashboard ทำงานแยกอิสระ) + Mobile Test Page
+// js/main.js - แก้ไขให้รองรับทั้ง 3 ฟอร์ม (Dashboard ทำงานแยกอิสระ) + Mobile Test Page + Reports Page
 // ====================================================
 // ⭐ GLOBAL CONFIGURATION
 // ====================================================
@@ -991,7 +991,7 @@ window.showExport = showExport;
 window.showHomepage = showHomepage;
 
 // ====================================================
-// 🔧 PAGE SCRIPT EXECUTION - แก้ไขแล้วให้รองรับ Dashboard + Mobile Test
+// 🔧 PAGE SCRIPT EXECUTION - แก้ไขแล้วให้รองรับ Dashboard + Mobile Test + Reports
 // ====================================================
 
 function executePageScripts(url, html = null) {
@@ -1127,6 +1127,56 @@ function executePageScripts(url, html = null) {
             }
         }, 500); // รอ 500ms ให้ scripts โหลดเสร็จ
     }
+    
+    // ✅ Reports Page: เรียก initReports() เมื่อโหลดเสร็จ
+    if (url.includes('reports.html')) {
+        console.log('📊 Reports page detected - Initializing reports...');
+        
+        // รอให้ reports script โหลดและ execute เสร็จ
+        setTimeout(() => {
+            console.log('🚀 Attempting to initialize reports...');
+            
+            // ตรวจสอบว่ามีฟังก์ชัน initReports หรือไม่ (จาก reports.html)
+            if (typeof window.initReports === 'function') {
+                console.log('🎯 Calling initReports() from main.js...');
+                try {
+                    window.initReports();
+                    console.log('✅ Reports initialized successfully via main.js');
+                } catch (error) {
+                    console.error('❌ Error calling initReports():', error);
+                    
+                    // Fallback: ลองเรียก reportApp.init() โดยตรง
+                    if (typeof window.reportApp !== 'undefined' && 
+                        typeof window.reportApp.init === 'function') {
+                        console.log('🔄 Fallback: Calling reportApp.init() directly...');
+                        try {
+                            window.reportApp.init();
+                        } catch (fallbackError) {
+                            console.error('❌ Fallback also failed:', fallbackError);
+                        }
+                    }
+                }
+            } else if (typeof window.reportApp !== 'undefined' && 
+                      typeof window.reportApp.init === 'function') {
+                // ถ้าไม่มี initReports แต่มี reportApp.init
+                console.log('🎯 Calling reportApp.init() directly...');
+                try {
+                    window.reportApp.init();
+                    console.log('✅ Reports initialized via reportApp.init()');
+                } catch (error) {
+                    console.error('❌ Error calling reportApp.init():', error);
+                }
+            } else {
+                console.error('❌ No reports initialization function found');
+                console.log('Available functions:', {
+                    hasInitReports: typeof window.initReports,
+                    hasReportApp: typeof window.reportApp,
+                    hasReportAppInit: typeof window.reportApp !== 'undefined' ? 
+                                     typeof window.reportApp.init : 'no reportApp'
+                });
+            }
+        }, 500); // รอ 500ms ให้ scripts โหลดเสร็จ
+    }
 }
 
 // ====================================================
@@ -1165,7 +1215,7 @@ window.onload = function() {
         }
     });
     
-    console.log('✅ Application initialized (พร้อมรองรับ Dashboard และ Mobile Test)');
+    console.log('✅ Application initialized (พร้อมรองรับ Dashboard, Mobile Test และ Reports)');
 };
 
 // ====================================================
@@ -1387,6 +1437,30 @@ window.initMobileTest = function() {
     }
 };
 
+// ✅ ฟังก์ชันใหม่: เรียก init สำหรับ reports
+// ✅ ฟังก์ชันใหม่: เรียก init สำหรับ reports
+window.initReports = function() {
+    console.log('🎯 initReports called from main.js');
+    
+    // ✅ แก้ไข: เรียก initSummary แทน
+    if (typeof window.initSummary === 'function') {
+        console.log('🚀 Initializing reports via initSummary...');
+        window.initSummary();
+        return true;
+    }
+    
+    // ✅ หรือเรียก summaryApp.init() โดยตรง
+    if (typeof window.summaryApp !== 'undefined' && 
+        typeof window.summaryApp.init === 'function') {
+        console.log('🎯 Calling summaryApp.init() directly...');
+        window.summaryApp.init();
+        return true;
+    }
+    
+    console.error('❌ No reports initialization function found');
+    return false;
+};
+
 window.loadPersonnelData = async function() {
     console.log('👥 loadPersonnelData called from main.js');
     
@@ -1475,7 +1549,7 @@ window.addEventListener('resize', function() {
     if (window.innerWidth > 768) closeMobileMenu();
 });
 
-console.log('✅ Main.js loaded successfully (พร้อมรองรับ Dashboard และ Mobile Test auto-load)');
+console.log('✅ Main.js loaded successfully (พร้อมรองรับ Dashboard, Mobile Test และ Reports auto-load)');
 
 // ✅ เพิ่ม CSS สำหรับ loading animation และ notifications
 const loadingStyle = document.createElement('style');
