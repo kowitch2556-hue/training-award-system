@@ -833,49 +833,6 @@ function closeMobileMenu() {
 // 📂 PAGE LOADING FUNCTIONS
 // ====================================================
 
-/**
- * ⭐ ฟังก์ชันใหม่: ปรับปรุง asset paths ใน HTML (สำหรับ report.html และหน้าอื่นๆ)
- */
-function adjustAssetPathsInHTML(html, sourcePath) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    
-    // หา base path ที่ถูกต้อง
-    let basePath = './';
-    if (sourcePath.includes('/pages/')) {
-        basePath = '../';
-    }
-    
-    // แก้ไข path ใน link[href]
-    tempDiv.querySelectorAll('link[href]').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && (href.includes('../assets/') || href.includes('./assets/'))) {
-            const newHref = href.replace(/(\.\.\/|\.\/)?assets\//, `${basePath}assets/`);
-            link.setAttribute('href', newHref);
-        }
-    });
-    
-    // แก้ไข path ใน script[src]
-    tempDiv.querySelectorAll('script[src]').forEach(script => {
-        const src = script.getAttribute('src');
-        if (src && (src.includes('../assets/') || src.includes('./assets/'))) {
-            const newSrc = src.replace(/(\.\.\/|\.\/)?assets\//, `${basePath}assets/`);
-            script.setAttribute('src', newSrc);
-        }
-    });
-    
-    // แก้ไข path ใน img[src]
-    tempDiv.querySelectorAll('img[src]').forEach(img => {
-        const src = img.getAttribute('src');
-        if (src && (src.includes('../assets/') || src.includes('./assets/'))) {
-            const newSrc = src.replace(/(\.\.\/|\.\/)?assets\//, `${basePath}assets/`);
-            img.setAttribute('src', newSrc);
-        }
-    });
-    
-    return tempDiv.innerHTML;
-}
-
 function loadContent(url, targetId) {
     const targetElement = document.getElementById(targetId);
     if (!targetElement) {
@@ -904,16 +861,14 @@ function loadContent(url, targetId) {
             return response.text();
         })
         .then(html => {
-            // ✅ ใช้ฟังก์ชันปรับ path สำหรับ report.html และหน้าอื่นๆ
-            const processedHTML = adjustAssetPathsInHTML(html, url);
-            targetElement.innerHTML = processedHTML;
+            targetElement.innerHTML = html;
             
-            executeScriptsFromHTML(processedHTML);
+            executeScriptsFromHTML(html);
             
             if (window.innerWidth <= 768) closeMobileMenu();
             
             // ✅ ส่ง html ไปให้ executePageScripts ด้วย
-            executePageScripts(url, processedHTML);
+            executePageScripts(url, html);
             
             console.log(`✅ Loaded: ${url}`);
         })
@@ -1482,6 +1437,7 @@ window.initMobileTest = function() {
     }
 };
 
+// ✅ ฟังก์ชันใหม่: เรียก init สำหรับ reports
 // ✅ ฟังก์ชันใหม่: เรียก init สำหรับ reports
 window.initReports = function() {
     console.log('🎯 initReports called from main.js');

@@ -1,1530 +1,418 @@
-<!-- pages/reports.html -->
-<div class="reports-page" style="
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Sarabun', sans-serif;
-    min-height: 100vh;
-    background: #f5f7fb;
-">
-
-    <!-- Page Header -->
-    <div class="reports-header" style="
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 25px 30px;
-        border-radius: 12px;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
-    ">
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-            <div style="
-                width: 50px;
-                height: 50px;
-                background: rgba(255,255,255,0.2);
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 24px;
-            ">
-                📊
-            </div>
-            <div>
-                <h1 style="margin: 0 0 5px 0; font-size: 28px; font-weight: 600;">
-                    ระบบรายงานและวิเคราะห์ข้อมูล
-                </h1>
-                <p style="margin: 0; font-size: 16px; opacity: 0.9;">
-                    ดึงข้อมูลจาก Google Sheet สำหรับรายงานสรุปผลการอบรม รางวัลครู และผลงานนักเรียน
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Stats Cards -->
-    <div class="quick-stats-grid" style="
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 15px;
-        margin-bottom: 25px;
-    ">
-        <!-- Training Stats -->
-        <div class="stat-card" style="
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-            transition: transform 0.2s;
-        " onmouseover="this.style.transform='translateY(-3px)'" 
-        onmouseout="this.style.transform='translateY(0)'">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <div style="
-                    width: 40px;
-                    height: 40px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-size: 20px;
-                ">
-                    🎓
-                </div>
-                <span style="font-size: 24px; font-weight: 700; color: #2c3e50;" id="stat-training">0</span>
-            </div>
-            <div style="color: #666; font-size: 14px;">การอบรมทั้งหมด</div>
-            <div style="margin-top: 8px; font-size: 12px; color: #7f8c8d;">จาก Google Sheet</div>
-        </div>
-
-        <!-- Student Work Stats -->
-        <div class="stat-card" style="
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-            transition: transform 0.2s;
-        " onmouseover="this.style.transform='translateY(-3px)'" 
-        onmouseout="this.style.transform='translateY(0)'">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <div style="
-                    width: 40px;
-                    height: 40px;
-                    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-size: 20px;
-                ">
-                    👨‍🎓
-                </div>
-                <span style="font-size: 24px; font-weight: 700; color: #2c3e50;" id="stat-student">0</span>
-            </div>
-            <div style="color: #666; font-size: 14px;">ผลงานนักเรียน</div>
-            <div style="margin-top: 8px; font-size: 12px; color: #7f8c8d;">จาก Google Sheet</div>
-        </div>
-
-        <!-- Teacher Award Stats -->
-        <div class="stat-card" style="
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-            transition: transform 0.2s;
-        " onmouseover="this.style.transform='translateY(-3px)'" 
-        onmouseout="this.style.transform='translateY(0)'">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <div style="
-                    width: 40px;
-                    height: 40px;
-                    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-size: 20px;
-                ">
-                    🏆
-                </div>
-                <span style="font-size: 24px; font-weight: 700; color: #2c3e50;" id="stat-teacher">0</span>
-            </div>
-            <div style="color: #666; font-size: 14px;">รางวัลครู</div>
-            <div style="margin-top: 8px; font-size: 12px; color: #7f8c8d;">จาก Google Sheet</div>
-        </div>
-
-        <!-- Personnel Stats -->
-        <div class="stat-card" style="
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-            transition: transform 0.2s;
-        " onmouseover="this.style.transform='translateY(-3px)'" 
-        onmouseout="this.style.transform='translateY(0)'">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <div style="
-                    width: 40px;
-                    height: 40px;
-                    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-size: 20px;
-                ">
-                    👥
-                </div>
-                <span style="font-size: 24px; font-weight: 700; color: #2c3e50;" id="stat-personnel">0</span>
-            </div>
-            <div style="color: #666; font-size: 14px;">บุคลากรทั้งหมด</div>
-            <div style="margin-top: 8px; font-size: 12px; color: #7f8c8d;">จาก Google Sheet</div>
-        </div>
-    </div>
-
-    <!-- Main Content Grid -->
-    <div style="display: grid; grid-template-columns: 280px 1fr; gap: 25px;">
+<!-- ✅ เปลี่ยนเป็น HTML Fragment แบบ SPA -->
+<div class="main-reports-container" id="reports-container" style="margin: 0 !important; padding: 15px !important; position: relative !important; top: 0 !important;">
+    <style>
+        /* เก็บเฉพาะ animation และ font ที่จำเป็น */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         
-        <!-- Left Panel: Filters -->
-        <div class="filter-panel" style="
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        ">
-            <div style="margin-bottom: 25px;">
-                <h3 style="color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <span style="
-                        width: 32px;
-                        height: 32px;
-                        background: #667eea;
-                        border-radius: 8px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: white;
-                        font-size: 16px;
-                    ">⚙️</span>
-                    ตัวกรองรายงาน
-                </h3>
-                
-                <!-- Report Type -->
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 14px;">
-                        ประเภทรายงาน
-                    </label>
-                    <select id="report-type" onchange="reports.changeReportType()" style="
-                        width: 100%;
-                        padding: 12px 15px;
-                        border: 2px solid #e9ecef;
-                        border-radius: 8px;
-                        font-size: 14px;
-                        background: white;
-                        cursor: pointer;
-                        font-family: 'Sarabun', sans-serif;
-                        transition: border-color 0.2s;
-                    " onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'" 
-                    onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none'">
-                        <option value="training_summary">📊 สรุปผลการอบรม</option>
-                        <option value="training_detail">🎓 รายละเอียดการอบรม</option>
-                        <option value="student_summary">👨‍🎓 สรุปผลงานนักเรียน</option>
-                        <option value="student_detail">📋 รายละเอียดผลงานนักเรียน</option>
-                        <option value="teacher_summary">🏆 สรุปรางวัลครู</option>
-                        <option value="teacher_detail">📝 รายละเอียดรางวัลครู</option>
-                        <option value="personnel_report">👥 รายงานบุคลากร</option>
-                        <option value="yearly_summary">📅 สรุปภาพรวมประจำปี</option>
-                    </select>
-                </div>
-                
-                <!-- Date Range -->
-                <div style="margin-bottom: 25px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 14px;">
-                        📅 ช่วงเวลา
-                    </label>
-                    <div style="display: grid; gap: 12px;">
-                        <div>
-                            <div style="font-size: 12px; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">ตั้งแต่</div>
-                            <input type="date" id="date-from" style="
-                                width: 100%;
-                                padding: 10px 12px;
-                                border: 2px solid #e9ecef;
-                                border-radius: 8px;
-                                font-size: 14px;
-                                font-family: 'Sarabun', sans-serif;
-                                transition: border-color 0.2s;
-                            " onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'" 
-                            onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none'">
-                        </div>
-                        <div>
-                            <div style="font-size: 12px; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">ถึง</div>
-                            <input type="date" id="date-to" style="
-                                width: 100%;
-                                padding: 10px 12px;
-                                border: 2px solid #e9ecef;
-                                border-radius: 8px;
-                                font-size: 14px;
-                                font-family: 'Sarabun', sans-serif;
-                                transition: border-color 0.2s;
-                            " onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'" 
-                            onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none'">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Dynamic Filters -->
-                <div id="dynamic-filters"></div>
-                
-                <!-- Action Buttons -->
-                <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 12px;">
-                    <button onclick="reports.generateReport()" style="
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        color: white;
-                        border: none;
-                        padding: 14px;
-                        border-radius: 8px;
-                        font-size: 15px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 10px;
-                        transition: all 0.3s;
-                        letter-spacing: 0.5px;
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102,126,234,0.4)'" 
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        <span style="font-size: 18px;">🔍</span>
-                        สร้างรายงาน
-                    </button>
-                    
-                    <button onclick="reports.exportToExcel()" style="
-                        background: #27ae60;
-                        color: white;
-                        border: none;
-                        padding: 14px;
-                        border-radius: 8px;
-                        font-size: 15px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 10px;
-                        transition: all 0.3s;
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(39,174,96,0.4)'" 
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        <span style="font-size: 18px;">📥</span>
-                        ส่งออก Excel
-                    </button>
-                    
-                    <button onclick="reports.resetFilters()" style="
-                        background: #f8f9fa;
-                        color: #666;
-                        border: 2px solid #e9ecef;
-                        padding: 14px;
-                        border-radius: 8px;
-                        font-size: 15px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 10px;
-                        transition: all 0.3s;
-                    " onmouseover="this.style.background='#e9ecef'; this.style.borderColor='#dee2e6'" 
-                    onmouseout="this.style.background='#f8f9fa'; this.style.borderColor='#e9ecef'">
-                        <span style="font-size: 18px;">🔄</span>
-                        ล้างตัวกรอง
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Report Info -->
-            <div style="
-                background: linear-gradient(135deg, #f5f7fb 0%, #e9ecef 100%);
-                padding: 20px;
-                border-radius: 10px;
-                border: 1px solid #e9ecef;
-                margin-top: 25px;
-            ">
-                <h4 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 16px; display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 20px;">ℹ️</span> คำแนะนำ
-                </h4>
-                <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #666; line-height: 1.6;">
-                    <li>เลือกประเภทรายงานที่ต้องการ</li>
-                    <li>กำหนดช่วงเวลาที่ต้องการดูข้อมูล</li>
-                    <li>คลิก "สร้างรายงาน" เพื่อดึงข้อมูล</li>
-                    <li>คลิก "ส่งออก Excel" เพื่อดาวน์โหลด</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Right Panel: Report Content -->
-        <div class="report-content" style="min-height: 800px;">
-            
-            <!-- Report Header -->
-            <div id="report-header" style="
-                background: white;
-                border-radius: 12px;
-                padding: 25px 30px;
-                margin-bottom: 20px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-                border: 1px solid #e9ecef;
-            ">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h2 id="report-title" style="margin: 0; color: #2c3e50; font-size: 24px; font-weight: 700;">
-                            รายงานสรุปผลการอบรม
-                        </h2>
-                        <p id="report-subtitle" style="margin: 8px 0 0 0; color: #7f8c8d; font-size: 15px;">
-                            เลือกประเภทรายงานและตั้งค่าตัวกรองเพื่อสร้างรายงาน
-                        </p>
-                    </div>
-                    <div style="
-                        background: #f8f9fa;
-                        padding: 10px 16px;
-                        border-radius: 8px;
-                        border: 1px solid #e9ecef;
-                        font-size: 14px;
-                        color: #666;
-                        min-width: 200px;
-                        text-align: center;
-                    ">
-                        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 2px;" id="report-generated-time">
-                            กำลังโหลด...
-                        </div>
-                        <div style="font-size: 12px; color: #7f8c8d;" id="report-item-count">
-                            ข้อมูลจาก Google Sheet
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Report Content Area -->
-            <div id="report-result" style="
-                background: white;
-                border-radius: 12px;
-                padding: 30px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-                border: 1px solid #e9ecef;
-                min-height: 500px;
-            ">
-                <!-- Loading State -->
-                <div id="report-loading" style="
-                    display: none;
-                    text-align: center;
-                    padding: 80px 20px;
-                ">
-                    <div style="
-                        width: 60px;
-                        height: 60px;
-                        border: 4px solid #f3f3f3;
-                        border-top: 4px solid #667eea;
-                        border-radius: 50%;
-                        animation: spin 1s linear infinite;
-                        margin: 0 auto 25px;
-                    "></div>
-                    <h3 style="color: #2c3e50; margin-bottom: 10px;">กำลังสร้างรายงาน...</h3>
-                    <p style="color: #7f8c8d; max-width: 400px; margin: 0 auto;">
-                        กำลังดึงข้อมูลจาก Google Sheet โปรดรอสักครู่
-                    </p>
-                </div>
-
-                <!-- Empty State -->
-                <div id="report-empty" style="
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    text-align: center;
-                    padding: 100px 20px;
-                ">
-                    <div style="
-                        width: 80px;
-                        height: 80px;
-                        background: linear-gradient(135deg, #f5f7fb 0%, #e9ecef 100%);
-                        border-radius: 20px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 32px;
-                        margin-bottom: 25px;
-                        color: #667eea;
-                    ">
-                        📊
-                    </div>
-                    <h3 style="color: #2c3e50; margin-bottom: 10px; font-size: 22px;">
-                        ยินดีต้อนรับสู่ระบบรายงาน
-                    </h3>
-                    <p style="color: #7f8c8d; max-width: 500px; margin: 0 auto 25px; font-size: 15px;">
-                        เลือกประเภทรายงานจากเมนูด้านซ้ายมือ ตั้งค่าตัวกรอง และคลิกปุ่ม "สร้างรายงาน" 
-                        เพื่อดึงข้อมูลจาก Google Sheet
-                    </p>
-                    <button onclick="reports.generateReport()" style="
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        color: white;
-                        border: none;
-                        padding: 12px 24px;
-                        border-radius: 8px;
-                        font-size: 15px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        transition: all 0.3s;
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102,126,234,0.4)'" 
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        🔍 ลองสร้างรายงานตัวอย่าง
-                    </button>
-                </div>
-
-                <!-- Report Content (Dynamic) -->
-                <div id="report-content"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Styles -->
-<style>
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.report-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 14px;
-    animation: fadeIn 0.5s ease-out;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.report-table th {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
-    text-align: left;
-    padding: 14px 16px;
-    border: none;
-    font-size: 14px;
-    white-space: nowrap;
-}
-
-.report-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #e9ecef;
-    vertical-align: top;
-    color: #2c3e50;
-}
-
-.report-table tr:last-child td {
-    border-bottom: none;
-}
-
-.report-table tr:hover {
-    background: #f8f9fa;
-}
-
-.chart-container {
-    background: white;
-    border-radius: 12px;
-    padding: 25px;
-    margin: 25px 0;
-    border: 1px solid #e9ecef;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-}
-
-.stat-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.badge-training { background: #e3f2fd; color: #1976d2; }
-.badge-student { background: #e8f5e9; color: #388e3c; }
-.badge-teacher { background: #fff3e0; color: #f57c00; }
-
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin: 20px 0;
-}
-
-.summary-card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    border: 1px solid #e9ecef;
-    text-align: center;
-    transition: transform 0.2s;
-}
-
-.summary-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-    .reports-page > div:last-child {
-        grid-template-columns: 1fr;
-    }
-    
-    .filter-panel {
-        position: static !important;
-        margin-bottom: 25px;
-    }
-}
-
-@media (max-width: 768px) {
-    .reports-page {
-        padding: 15px;
-    }
-    
-    .reports-header {
-        padding: 20px !important;
-    }
-    
-    .reports-header h1 {
-        font-size: 22px !important;
-    }
-    
-    .quick-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .quick-stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .report-table {
-        font-size: 12px;
-    }
-    
-    .report-table th,
-    .report-table td {
-        padding: 10px 12px;
-    }
-}
-</style>
-
-<!-- JavaScript -->
-<script>
-// ========================================
-// 🎯 REPORTS SYSTEM - แบบเต็มที่ทำงานได้
-// ========================================
-const reports = {
-    currentReportType: 'training_summary',
-    filters: {},
-    reportData: {},
-    
-    // Initialization
-    init: function() {
-        console.log('📊 Reports System Initializing...');
-        
-        // Set default dates (last 30 days)
-        this.setDefaultDates();
-        
-        // Load quick stats
-        this.loadQuickStats();
-        
-        // Set initial state
-        document.getElementById('report-empty').style.display = 'flex';
-        document.getElementById('report-content').innerHTML = '';
-        
-        // Initialize report title
-        this.updateReportTitle();
-        
-        console.log('✅ Reports System Ready');
-        
-        // Auto-load sample report after 1 second
-        setTimeout(() => {
-            this.loadQuickStats();
-        }, 1000);
-    },
-    
-    // Set default date range
-    setDefaultDates: function() {
-        const today = new Date();
-        const lastMonth = new Date();
-        lastMonth.setDate(today.getDate() - 30);
-        
-        const formatDate = (date) => {
-            return date.toISOString().split('T')[0];
-        };
-        
-        document.getElementById('date-from').value = formatDate(lastMonth);
-        document.getElementById('date-to').value = formatDate(today);
-    },
-    
-    // Load quick statistics
-    loadQuickStats: async function() {
-        try {
-            console.log('📊 Loading quick stats...');
-            
-            // Try to get data from dashboard or directly from API
-            const response = await window.callGASAPI('getDashboardData');
-            
-            if (response.status === 'SUCCESS' && response.data) {
-                const data = response.data;
-                const summary = data.summary?.total || {};
-                
-                // Update stats
-                document.getElementById('stat-training').textContent = summary.trainings || '0';
-                document.getElementById('stat-student').textContent = summary.studentWorks || '0';
-                document.getElementById('stat-teacher').textContent = summary.teacherAwards || '0';
-                document.getElementById('stat-personnel').textContent = summary.personnel || '0';
-                
-                console.log('✅ Quick stats updated');
-            } else {
-                // Fallback to mock data
-                this.loadMockStats();
+        /* เพิ่ม keyframes สำหรับ slideIn/slideOut ถ้าจำเป็น */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
             }
-        } catch (error) {
-            console.error('Error loading quick stats:', error);
-            this.loadMockStats();
-        }
-    },
-    
-    // Fallback mock stats
-    loadMockStats: function() {
-        document.getElementById('stat-training').textContent = '15';
-        document.getElementById('stat-student').textContent = '8';
-        document.getElementById('stat-teacher').textContent = '12';
-        document.getElementById('stat-personnel').textContent = '35';
-    },
-    
-    // Update report title based on type
-    updateReportTitle: function() {
-        const titles = {
-            'training_summary': 'รายงานสรุปผลการอบรม',
-            'training_detail': 'รายงานละเอียดการอบรม',
-            'student_summary': 'สรุปผลงานนักเรียน',
-            'student_detail': 'รายงานละเอียดผลงานนักเรียน',
-            'teacher_summary': 'สรุปรางวัลครู',
-            'teacher_detail': 'รายงานละเอียดรางวัลครู',
-            'personnel_report': 'รายงานบุคลากร',
-            'yearly_summary': 'สรุปภาพรวมประจำปี'
-        };
-        
-        document.getElementById('report-title').textContent = 
-            titles[this.currentReportType] || 'รายงาน';
-    },
-    
-    // Change report type
-    changeReportType: function() {
-        const select = document.getElementById('report-type');
-        this.currentReportType = select.value;
-        
-        // Update title
-        this.updateReportTitle();
-        
-        // Update dynamic filters
-        this.updateDynamicFilters();
-        
-        // Update subtitle
-        document.getElementById('report-subtitle').textContent = 
-            'เลือกช่วงเวลาและคลิก "สร้างรายงาน" เพื่อดึงข้อมูล';
-    },
-    
-    // Update dynamic filters based on report type
-    updateDynamicFilters: function() {
-        const container = document.getElementById('dynamic-filters');
-        let html = '';
-        
-        switch(this.currentReportType) {
-            case 'training_summary':
-            case 'training_detail':
-                html = `
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 14px;">
-                            🎯 ประเภทการอบรม
-                        </label>
-                        <select id="filter-training-type" style="
-                            width: 100%;
-                            padding: 12px 15px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 14px;
-                            background: white;
-                            cursor: pointer;
-                            font-family: 'Sarabun', sans-serif;
-                        ">
-                            <option value="">ทั้งหมด</option>
-                            <option value="อบรม">อบรมทั่วไป</option>
-                            <option value="วิทยากร">วิทยากร</option>
-                            <option value="ศึกษาดูงาน">ศึกษาดูงาน</option>
-                            <option value="สัมมนา">สัมมนา</option>
-                        </select>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 14px;">
-                            🏢 หน่วยงานจัด
-                        </label>
-                        <input type="text" id="filter-organizer" placeholder="ตัวอย่าง: กรมวิชาการ, สพฐ." style="
-                            width: 100%;
-                            padding: 12px 15px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 14px;
-                            font-family: 'Sarabun', sans-serif;
-                        ">
-                    </div>
-                `;
-                break;
-                
-            case 'student_summary':
-            case 'student_detail':
-                html = `
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 14px;">
-                            🎨 ประเภทผลงาน
-                        </label>
-                        <select id="filter-work-type" style="
-                            width: 100%;
-                            padding: 12px 15px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 14px;
-                            background: white;
-                            cursor: pointer;
-                            font-family: 'Sarabun', sans-serif;
-                        ">
-                            <option value="">ทั้งหมด</option>
-                            <option value="วิชาการ">วิชาการ</option>
-                            <option value="กีฬา">กีฬา</option>
-                            <option value="ดนตรี">ดนตรี</option>
-                            <option value="ศิลปะ">ศิลปะ</option>
-                            <option value="นวัตกรรม">นวัตกรรม</option>
-                        </select>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 14px;">
-                            🏆 ระดับรางวัล
-                        </label>
-                        <select id="filter-award-level" style="
-                            width: 100%;
-                            padding: 12px 15px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 14px;
-                            background: white;
-                            cursor: pointer;
-                            font-family: 'Sarabun', sans-serif;
-                        ">
-                            <option value="">ทั้งหมด</option>
-                            <option value="โรงเรียน">โรงเรียน</option>
-                            <option value="เขตพื้นที่">เขตพื้นที่</option>
-                            <option value="จังหวัด">จังหวัด</option>
-                            <option value="ประเทศ">ประเทศ</option>
-                            <option value="นานาชาติ">นานาชาติ</option>
-                        </select>
-                    </div>
-                `;
-                break;
-                
-            case 'teacher_summary':
-            case 'teacher_detail':
-                html = `
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; font-size: 14px;">
-                            🏅 ระดับรางวัล
-                        </label>
-                        <select id="filter-teacher-level" style="
-                            width: 100%;
-                            padding: 12px 15px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 14px;
-                            background: white;
-                            cursor: pointer;
-                            font-family: 'Sarabun', sans-serif;
-                        ">
-                            <option value="">ทั้งหมด</option>
-                            <option value="โรงเรียน">โรงเรียน</option>
-                            <option value="เขตพื้นที่">เขตพื้นที่</option>
-                            <option value="จังหวัด">จังหวัด</option>
-                            <option value="ประเทศ">ประเทศ</option>
-                            <option value="นานาชาติ">นานาชาติ</option>
-                        </select>
-                    </div>
-                `;
-                break;
-        }
-        
-        container.innerHTML = html;
-    },
-    
-    // Collect all filters
-    collectFilters: function() {
-        const filters = {
-            reportType: this.currentReportType,
-            dateFrom: document.getElementById('date-from').value,
-            dateTo: document.getElementById('date-to').value
-        };
-        
-        // Add dynamic filters based on report type
-        switch(this.currentReportType) {
-            case 'training_summary':
-            case 'training_detail':
-                filters.trainingType = document.getElementById('filter-training-type')?.value || '';
-                filters.organizer = document.getElementById('filter-organizer')?.value || '';
-                break;
-            case 'student_summary':
-            case 'student_detail':
-                filters.workType = document.getElementById('filter-work-type')?.value || '';
-                filters.awardLevel = document.getElementById('filter-award-level')?.value || '';
-                break;
-            case 'teacher_summary':
-            case 'teacher_detail':
-                filters.awardLevel = document.getElementById('filter-teacher-level')?.value || '';
-                break;
-        }
-        
-        return filters;
-    },
-    
-    // Generate report
-    generateReport: async function() {
-        console.log('🔍 Generating report...');
-        
-        const filters = this.collectFilters();
-        this.filters = filters;
-        
-        // Validate dates
-        if (!filters.dateFrom || !filters.dateTo) {
-            this.showMessage('⚠️ กรุณาเลือกช่วงเวลาให้ครบถ้วน', 'warning');
-            return;
-        }
-        
-        // Show loading
-        this.showLoading(true);
-        
-        try {
-            // Call API to get report data
-            const response = await window.callGASAPI('getReportData', {
-                reportType: filters.reportType,
-                filters: filters,
-                timestamp: new Date().toISOString()
-            });
-            
-            if (response.status === 'SUCCESS') {
-                this.reportData = response.data || {};
-                this.renderReport();
-                this.showMessage('✅ สร้างรายงานสำเร็จ!', 'success');
-            } else {
-                throw new Error(response.error || 'ไม่สามารถดึงข้อมูลได้');
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
-            
-        } catch (error) {
-            console.error('Error generating report:', error);
-            
-            // Fallback to mock data for demo
-            this.showMessage('⚠️ ใช้ข้อมูลตัวอย่าง (กำลังพัฒนาระบบ)', 'warning');
-            this.loadMockReportData();
-            this.renderReport();
-            
-        } finally {
-            this.showLoading(false);
         }
-    },
-    
-    // Show loading state
-    showLoading: function(show) {
-        const loading = document.getElementById('report-loading');
-        const empty = document.getElementById('report-empty');
-        const content = document.getElementById('report-content');
         
-        if (show) {
-            loading.style.display = 'block';
-            empty.style.display = 'none';
-            content.innerHTML = '';
-        } else {
-            loading.style.display = 'none';
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
         }
-    },
+    </style>
     
-    // Show message
-    showMessage: function(message, type = 'info') {
-        // Create message element
-        const messageDiv = document.createElement('div');
-        messageDiv.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            background: ${type === 'success' ? '#d4edda' : 
-                        type === 'warning' ? '#fff3cd' : '#d1ecf1'};
-            color: ${type === 'success' ? '#155724' : 
-                    type === 'warning' ? '#856404' : '#0c5460'};
-            border-left: 4px solid ${type === 'success' ? '#28a745' : 
-                                type === 'warning' ? '#ffc107' : '#17a2b8'};
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            animation: fadeIn 0.3s ease-out;
-            max-width: 300px;
-        `;
-        
-        messageDiv.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 20px;">
-                    ${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️'}
+    <!-- ✅ เรียกใช้ reports-scoped.css แทน -->
+    <link rel="stylesheet" href="../assets/css/reports-scoped.css">
+    
+    <div class="reports-container">
+        <!-- Header -->
+        <header class="reports-header">
+            <h1><i class="fas fa-chart-bar"></i> รายงานและสถิติ</h1>
+            <div class="header-controls">
+                <button id="refresh-reports" class="btn-refresh">
+                    <i class="fas fa-sync-alt"></i> โหลดข้อมูลใหม่
+                </button>
+                <span class="last-updated" id="last-updated">
+                    อัพเดทล่าสุด: กำลังโหลด...
                 </span>
-                <span>${message}</span>
             </div>
-        `;
-        
-        document.body.appendChild(messageDiv);
-        
-        // Remove after 3 seconds
-        setTimeout(() => {
-            if (messageDiv.parentNode) {
-                messageDiv.style.animation = 'fadeOut 0.3s ease-out';
-                setTimeout(() => {
-                    messageDiv.remove();
-                }, 300);
-            }
-        }, 3000);
-    },
-    
-    // Load mock report data for demo
-    loadMockReportData: function() {
-        const mockData = {
-            summary: {
-                total: 15,
-                byType: [
-                    { type: 'อบรม', count: 8, percentage: 53 },
-                    { type: 'วิทยากร', count: 4, percentage: 27 },
-                    { type: 'ศึกษาดูงาน', count: 3, percentage: 20 }
-                ],
-                totalHours: 128,
-                uniquePersonnel: 12
-            },
-            items: [
-                {
-                    fullName: 'นางสาวสุนันทา เมฆไตรรัตน์',
-                    courseName: 'กิจกรรม 5 ส',
-                    date: '2025-12-11',
-                    type: 'อบรม',
-                    hours: 2,
-                    organizer: 'โรงเรียน',
-                    location: 'โรงเรียน'
-                },
-                {
-                    fullName: 'นางคำมี ชัยรักษา',
-                    courseName: 'เรียนรู้การใช้งาน AI',
-                    date: '2025-12-10',
-                    type: 'อบรม',
-                    hours: 8,
-                    organizer: 'โรงเรียน2',
-                    location: 'โรงเรียน2'
-                },
-                {
-                    fullName: 'นางวันเพ็ญ ยิ้มประดิษฐ์',
-                    courseName: 'การจัดการเรียนการสอนยุคดิจิทัล',
-                    date: '2025-12-09',
-                    type: 'วิทยากร',
-                    hours: 6,
-                    organizer: 'สพฐ.',
-                    location: 'ออนไลน์'
-                }
-            ]
-        };
-        
-        this.reportData = mockData;
-    },
-    
-    // Render report based on type
-    renderReport: function() {
-        const contentDiv = document.getElementById('report-content');
-        const emptyDiv = document.getElementById('report-empty');
-        
-        emptyDiv.style.display = 'none';
-        
-        // Update report info
-        this.updateReportInfo();
-        
-        // Render based on report type
-        switch(this.currentReportType) {
-            case 'training_summary':
-                contentDiv.innerHTML = this.renderTrainingSummary();
-                break;
-            case 'training_detail':
-                contentDiv.innerHTML = this.renderTrainingDetail();
-                break;
-            case 'student_summary':
-                contentDiv.innerHTML = this.renderStudentSummary();
-                break;
-            case 'student_detail':
-                contentDiv.innerHTML = this.renderStudentDetail();
-                break;
-            case 'teacher_summary':
-                contentDiv.innerHTML = this.renderTeacherSummary();
-                break;
-            case 'teacher_detail':
-                contentDiv.innerHTML = this.renderTeacherDetail();
-                break;
-            default:
-                contentDiv.innerHTML = this.renderDefaultReport();
-        }
-        
-        // Add animation
-        contentDiv.style.animation = 'fadeIn 0.5s ease-out';
-    },
-    
-    // Update report info in header
-    updateReportInfo: function() {
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('th-TH', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-        const dateStr = now.toLocaleDateString('th-TH', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        
-        document.getElementById('report-generated-time').textContent = 
-            `สร้างเมื่อ: ${dateStr} ${timeStr}`;
-        
-        // Update subtitle with date range
-        const fromDate = new Date(this.filters.dateFrom).toLocaleDateString('th-TH');
-        const toDate = new Date(this.filters.dateTo).toLocaleDateString('th-TH');
-        document.getElementById('report-subtitle').textContent = 
-            `ข้อมูลระหว่างวันที่ ${fromDate} ถึง ${toDate}`;
-        
-        // Update item count
-        const itemCount = this.reportData.summary?.total || this.reportData.items?.length || 0;
-        document.getElementById('report-item-count').textContent = 
-            `พบ ${itemCount} รายการ`;
-    },
-    
-    // Render Training Summary Report
-    renderTrainingSummary: function() {
-        const data = this.reportData;
-        
-        return `
-            <div style="animation: fadeIn 0.5s ease-out;">
-                <!-- Summary Cards -->
-                <div class="summary-grid">
-                    <div class="summary-card">
-                        <div style="font-size: 32px; font-weight: 700; color: #667eea; margin-bottom: 5px;">
-                            ${data.summary?.total || 0}
-                        </div>
-                        <div style="color: #666; font-size: 14px;">รายการทั้งหมด</div>
-                    </div>
-                    <div class="summary-card">
-                        <div style="font-size: 32px; font-weight: 700; color: #27ae60; margin-bottom: 5px;">
-                            ${data.summary?.uniquePersonnel || 0}
-                        </div>
-                        <div style="color: #666; font-size: 14px;">บุคลากรที่ร่วม</div>
-                    </div>
-                    <div class="summary-card">
-                        <div style="font-size: 32px; font-weight: 700; color: #f39c12; margin-bottom: 5px;">
-                            ${data.summary?.totalHours || 0}
-                        </div>
-                        <div style="color: #666; font-size: 14px;">ชั่วโมงรวม</div>
-                    </div>
+        </header>
+
+        <!-- Tabs -->
+        <div class="reports-tabs">
+            <button class="report-tab active" data-tab="training">
+                <i class="fas fa-graduation-cap"></i> การอบรม
+            </button>
+            <button class="report-tab" data-tab="student">
+                <i class="fas fa-user-graduate"></i> ผลงานนักเรียน
+            </button>
+            <button class="report-tab" data-tab="teacher">
+                <i class="fas fa-chalkboard-teacher"></i> ผลงานครู
+            </button>
+        </div>
+
+        <!-- Status Messages -->
+        <div id="status-container" class="status-container"></div>
+
+        <!-- Content -->
+        <div id="reports-content" class="reports-content">
+            <!-- Training Report -->
+            <section id="training-report" class="report-section active">
+                <div class="report-header">
+                    <h2><i class="fas fa-graduation-cap"></i> รายงานการอบรม</h2>
+                    <button class="btn-export export-btn" data-type="training">
+                        <i class="fas fa-file-export"></i> ส่งออก CSV
+                    </button>
                 </div>
                 
-                <!-- By Type Table -->
-                <div style="margin: 30px 0;">
-                    <h3 style="color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                        <span style="
-                            width: 36px;
-                            height: 36px;
-                            background: #667eea;
-                            border-radius: 8px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            color: white;
-                        ">📊</span>
-                        การอบรมแยกตามประเภท
-                    </h3>
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-primary">
+                            <i class="fas fa-list-ol"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>รวมการอบรม</h3>
+                            <p class="stat-value" id="training-total">0</p>
+                        </div>
+                    </div>
                     
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th>ประเภทการอบรม</th>
-                                <th>จำนวนรายการ</th>
-                                <th>ร้อยละ</th>
-                                <th>จำนวนบุคลากร</th>
-                                <th>ชั่วโมงเฉลี่ย</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${(data.summary?.byType || []).map(item => `
-                                <tr>
-                                    <td>
-                                        <span class="badge-training" style="
-                                            display: inline-block;
-                                            padding: 4px 12px;
-                                            border-radius: 20px;
-                                            background: #e3f2fd;
-                                            color: #1976d2;
-                                            font-weight: 600;
-                                        ">${item.type}</span>
-                                    </td>
-                                    <td style="font-weight: 700; font-size: 16px;">${item.count}</td>
-                                    <td>${item.percentage}%</td>
-                                    <td>${item.personnel || Math.floor(item.count * 0.8)}</td>
-                                    <td>${item.avgHours || Math.floor(Math.random() * 8) + 1}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-success">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>ชั่วโมงทั้งหมด</h3>
+                            <p class="stat-value" id="training-hours">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon bg-info">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>ผู้เข้าร่วมทั้งหมด</h3>
+                            <p class="stat-value" id="training-participants">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon bg-warning">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>ชั่วโมงเฉลี่ยต่อคน</h3>
+                            <p class="stat-value" id="training-avg-hours">0</p>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Recent Activities -->
-                <div style="margin-top: 40px;">
-                    <h3 style="color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                        <span style="
-                            width: 36px;
-                            height: 36px;
-                            background: #27ae60;
-                            border-radius: 8px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            color: white;
-                        ">📝</span>
-                        การอบรมล่าสุด
-                    </h3>
-                    
-                    <div style="display: grid; gap: 15px;">
-                        ${(data.items || []).slice(0, 5).map(item => `
-                            <div style="
-                                background: white;
-                                border-radius: 10px;
-                                padding: 20px;
-                                border: 1px solid #e9ecef;
-                                transition: transform 0.2s;
-                            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'" 
-                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 8px; font-size: 16px;">
-                                            ${item.courseName}
-                                        </div>
-                                        <div style="color: #7f8c8d; margin-bottom: 12px; font-size: 14px;">
-                                            👤 ${item.fullName}
-                                        </div>
-                                        <div style="display: flex; gap: 15px; font-size: 13px;">
-                                            <span style="color: #666;">📅 ${item.date}</span>
-                                            <span style="color: #666;">⏱️ ${item.hours} ชั่วโมง</span>
-                                            <span style="color: #666;">📍 ${item.location}</span>
-                                        </div>
-                                    </div>
-                                    <span style="
-                                        background: ${item.type === 'วิทยากร' ? '#e3f2fd' : 
-                                                    item.type === 'ศึกษาดูงาน' ? '#e8f5e9' : '#fff3e0'};
-                                        color: ${item.type === 'วิทยากร' ? '#1976d2' : 
-                                                item.type === 'ศึกษาดูงาน' : '#388e3c' : '#f57c00'};
-                                        padding: 6px 15px;
-                                        border-radius: 20px;
-                                        font-size: 13px;
-                                        font-weight: 600;
-                                        white-space: nowrap;
-                                    ">${item.type}</span>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-        `;
-    },
-    
-    // Render Training Detail Report
-    renderTrainingDetail: function() {
-        const data = this.reportData;
-        
-        return `
-            <div style="animation: fadeIn 0.5s ease-out;">
-                <!-- Summary -->
-                <div style="
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    padding: 25px;
-                    border-radius: 12px;
-                    margin-bottom: 25px;
-                ">
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center;">
-                        <div>
-                            <div style="font-size: 14px; opacity: 0.9;">รายการทั้งหมด</div>
-                            <div style="font-size: 28px; font-weight: bold;">${data.summary?.total || 0}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 14px; opacity: 0.9;">บุคลากรที่ร่วม</div>
-                            <div style="font-size: 28px; font-weight: bold;">${data.summary?.uniquePersonnel || 0}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 14px; opacity: 0.9;">ชั่วโมงรวม</div>
-                            <div style="font-size: 28px; font-weight: bold;">${data.summary?.totalHours || 0}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 14px; opacity: 0.9;">หน่วยงานจัด</div>
-                            <div style="font-size: 28px; font-weight: bold;">${data.summary?.organizers || 5}</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Training List -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                        <span style="
-                            width: 36px;
-                            height: 36px;
-                            background: #667eea;
-                            border-radius: 8px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            color: white;
-                        ">📋</span>
-                        รายละเอียดการอบรมทั้งหมด
-                    </h3>
-                    
-                    <div style="overflow-x: auto;">
-                        <table class="report-table">
+                <div class="recent-section">
+                    <h3><i class="fas fa-history"></i> การอบรมล่าสุด</h3>
+                    <div class="table-container">
+                        <table id="training-recent-table" class="data-table">
                             <thead>
                                 <tr>
-                                    <th>ลำดับ</th>
-                                    <th>ชื่อ-นามสกุล</th>
-                                    <th>หลักสูตร/กิจกรรม</th>
                                     <th>วันที่</th>
+                                    <th>ชื่อ-นามสกุล</th>
+                                    <th>หลักสูตร</th>
                                     <th>ประเภท</th>
                                     <th>ชั่วโมง</th>
-                                    <th>หน่วยงานจัด</th>
                                     <th>สถานที่</th>
-                                    <th>ไฟล์แนบ</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                ${(data.items || []).map((item, index) => `
-                                    <tr>
-                                        <td style="font-weight: 700; color: #2c3e50;">${index + 1}</td>
-                                        <td>
-                                            <div style="font-weight: 600; color: #2c3e50;">${item.fullName}</div>
-                                            <div style="font-size: 12px; color: #7f8c8d;">${item.position || 'ครู'}</div>
-                                        </td>
-                                        <td>${item.courseName}</td>
-                                        <td>${item.date}</td>
-                                        <td>
-                                            <span style="
-                                                display: inline-block;
-                                                padding: 4px 12px;
-                                                border-radius: 20px;
-                                                background: ${item.type === 'วิทยากร' ? '#e3f2fd' : 
-                                                            item.type === 'ศึกษาดูงาน' ? '#e8f5e9' : '#fff3e0'};
-                                                color: ${item.type === 'วิทยากร' ? '#1976d2' : 
-                                                        item.type === 'ศึกษาดูงาน' ? '#388e3c' : '#f57c00'};
-                                                font-size: 12px;
-                                                font-weight: 600;
-                                            ">${item.type}</span>
-                                        </td>
-                                        <td style="font-weight: 700; color: #667eea;">${item.hours}</td>
-                                        <td>${item.organizer}</td>
-                                        <td>${item.location}</td>
-                                        <td>
-                                            ${item.certificate ? 
-                                                '<span style="color: #27ae60; font-weight: 600;">✓ มีไฟล์</span>' : 
-                                                '<span style="color: #7f8c8d;">-</span>'}
-                                        </td>
-                                    </tr>
-                                `).join('')}
+                                <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
                             </tbody>
                         </table>
                     </div>
                 </div>
                 
-                <!-- Export Button -->
-                <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid #e9ecef;">
-                    <button onclick="reports.exportToExcel()" style="
-                        background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
-                        color: white;
-                        border: none;
-                        padding: 15px 40px;
-                        border-radius: 8px;
-                        font-size: 16px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 12px;
-                        transition: all 0.3s;
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(39,174,96,0.4)'" 
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        <span style="font-size: 20px;">📥</span>
-                        ดาวน์โหลดรายงาน (Excel)
+                <!-- Top Participants -->
+                <div class="top-section">
+                    <h3><i class="fas fa-trophy"></i> ผู้เข้าร่วมมากที่สุด</h3>
+                    <ul id="training-top-list" class="top-list">
+                        <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Student Report -->
+            <section id="student-report" class="report-section">
+                <div class="report-header">
+                    <h2><i class="fas fa-user-graduate"></i> รายงานผลงานนักเรียน</h2>
+                    <button class="btn-export export-btn" data-type="student">
+                        <i class="fas fa-file-export"></i> ส่งออก CSV
                     </button>
                 </div>
-            </div>
-        `;
-    },
-    
-    // Render Student Summary Report
-    renderStudentSummary: function() {
-        return `
-            <div style="animation: fadeIn 0.5s ease-out; text-align: center; padding: 40px 20px;">
-                <div style="
-                    width: 100px;
-                    height: 100px;
-                    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-                    border-radius: 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 40px;
-                    color: white;
-                    margin: 0 auto 25px;
-                ">
-                    👨‍🎓
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-primary">
+                            <i class="fas fa-list-ol"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>รวมผลงาน</h3>
+                            <p class="stat-value" id="student-total">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon bg-success">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>ได้รับรางวัล</h3>
+                            <p class="stat-value" id="student-awards">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon bg-info">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>นักเรียนทั้งหมด</h3>
+                            <p class="stat-value" id="student-unique">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon bg-warning">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>ที่ปรึกษา</h3>
+                            <p class="stat-value" id="student-advisors">0</p>
+                        </div>
+                    </div>
                 </div>
-                <h3 style="color: #2c3e50; margin-bottom: 15px; font-size: 24px;">
-                    รายงานผลงานนักเรียน
-                </h3>
-                <p style="color: #7f8c8d; max-width: 500px; margin: 0 auto 30px;">
-                    ระบบรายงานผลงานนักเรียนกำลังอยู่ในขั้นตอนการพัฒนา
-                </p>
-                <div style="
-                    background: #f8f9fa;
-                    padding: 20px;
-                    border-radius: 10px;
-                    max-width: 400px;
-                    margin: 0 auto;
-                    text-align: left;
-                ">
-                    <h4 style="color: #2c3e50; margin-bottom: 15px;">📋 คุณสมบัติที่จะมี</h4>
-                    <ul style="margin: 0; padding-left: 20px; color: #666; line-height: 1.8;">
-                        <li>สรุปผลงานนักเรียนตามประเภท</li>
-                        <li>สถิติการได้รับรางวัล</li>
-                        <li>รายงานตามระดับชั้น</li>
-                        <li>กราฟแสดงแนวโน้มผลงาน</li>
-                        <li>ส่งออกข้อมูลเป็น Excel/PDF</li>
+                
+                <!-- Recent Activities -->
+                <div class="recent-section">
+                    <h3><i class="fas fa-history"></i> ผลงานล่าสุด</h3>
+                    <div class="table-container">
+                        <table id="student-recent-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>วันที่</th>
+                                    <th>ชื่อนักเรียน</th>
+                                    <th>ชื่อผลงาน</th>
+                                    <th>ระดับ</th>
+                                    <th>รางวัล</th>
+                                    <th>ที่ปรึกษา</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Top Students -->
+                <div class="top-section">
+                    <h3><i class="fas fa-trophy"></i> นักเรียนยอดเยี่ยม</h3>
+                    <ul id="student-top-list" class="top-list">
+                        <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
                     </ul>
                 </div>
-            </div>
-        `;
-    },
+            </section>
+
+            <!-- Teacher Report -->
+            <section id="teacher-report" class="report-section">
+                <div class="report-header">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> รายงานผลงานครู</h2>
+                    <button class="btn-export export-btn" data-type="teacher">
+                        <i class="fas fa-file-export"></i> ส่งออก CSV
+                    </button>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-primary">
+                            <i class="fas fa-list-ol"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>รวมผลงาน</h3>
+                            <p class="stat-value" id="teacher-total">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon bg-success">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>รางวัลชนะเลิศ</h3>
+                            <p class="stat-value" id="teacher-first">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon bg-info">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>ครูทั้งหมด</h3>
+                            <p class="stat-value" id="teacher-unique">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon bg-warning">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>ผลงานเฉลี่ย</h3>
+                            <p class="stat-value" id="teacher-avg">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activities -->
+                <div class="recent-section">
+                    <h3><i class="fas fa-history"></i> ผลงานล่าสุด</h3>
+                    <div class="table-container">
+                        <table id="teacher-recent-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>วันที่</th>
+                                    <th>ชื่อครู</th>
+                                    <th>ชื่อรางวัล</th>
+                                    <th>ระดับ</th>
+                                    <th>ความสำเร็จ</th>
+                                    <th>หน่วยงาน</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Top Teachers -->
+                <div class="top-section">
+                    <h3><i class="fas fa-trophy"></i> ครูยอดเยี่ยม</h3>
+                    <ul id="teacher-top-list" class="top-list">
+                        <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>กำลังโหลดข้อมูล...</p>
+        </div>
+    </div>
+
+    <!-- ✅ โหลด reports JavaScript -->
+    <script src="../assets/js/reports-core.js"></script>
+    <script src="../assets/js/reports-ui.js"></script>
     
-    // Render default report for other types
-    renderDefaultReport: function() {
-        const reportNames = {
-            'student_detail': 'รายงานละเอียดผลงานนักเรียน',
-            'teacher_summary': 'สรุปรางวัลครู',
-            'teacher_detail': 'รายงานละเอียดรางวัลครู',
-            'personnel_report': 'รายงานบุคลากร',
-            'yearly_summary': 'สรุปภาพรวมประจำปี'
+    <script>
+        // ✅ Global function สำหรับ main.js เรียก
+        window.initReports = function() {
+            console.log('🎯 initReports called from reports.html (SPA mode)');
+            
+            // ✅ ตรวจสอบว่า main.js โหลดมาหรือยัง
+            if (typeof window.callGASAPI !== 'function') {
+                console.error('❌ callGASAPI not available - main.js not loaded');
+                this.showStatusMessage('error', 'ไม่สามารถเชื่อมต่อกับระบบได้ กรุณาโหลดหน้าใหม่');
+                return false;
+            }
+            
+            console.log('🔗 API connection available, initializing reports...');
+            
+            // เรียก ReportsUI ถ้ามีอยู่
+            if (typeof ReportsUI === 'function') {
+                window.reportsApp = new ReportsUI();
+                window.reportsApp.init();
+            } else if (typeof window.summaryApp !== 'undefined') {
+                // หรือเรียก summaryApp ถ้ามี
+                window.summaryApp.init();
+            } else {
+                // ถ้าไม่มี UI library ให้โหลดข้อมูลเอง
+                this.loadReportsData();
+            }
+            
+            return true;
         };
         
-        const name = reportNames[this.currentReportType] || 'รายงาน';
+        // ✅ ฟังก์ชันโหลดข้อมูลถ้าไม่มี UI library
+        window.loadReportsData = async function() {
+            try {
+                showLoading(true);
+                const result = await window.callGASAPI('getReportsData', {});
+                
+                if (result.status === 'SUCCESS') {
+                    this.showStatusMessage('success', 'โหลดข้อมูลรายงานสำเร็จ');
+                    // ใส่โค้ดแสดงผลข้อมูลที่นี่
+                } else {
+                    this.showStatusMessage('error', `ไม่สามารถโหลดข้อมูล: ${result.error || 'ไม่ทราบสาเหตุ'}`);
+                }
+            } catch (error) {
+                this.showStatusMessage('error', `เกิดข้อผิดพลาด: ${error.message}`);
+            } finally {
+                showLoading(false);
+            }
+        };
         
-        return `
-            <div style="text-align: center; padding: 80px 20px;">
-                <div style="
-                    width: 120px;
-                    height: 120px;
-                    background: linear-gradient(135deg, #f5f7fb 0%, #e9ecef 100%);
-                    border-radius: 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 48px;
-                    color: #667eea;
-                    margin: 0 auto 30px;
-                ">
-                    🚧
-                </div>
-                <h3 style="color: #2c3e50; margin-bottom: 15px; font-size: 24px;">
-                    ${name}
-                </h3>
-                <p style="color: #7f8c8d; max-width: 500px; margin: 0 auto 30px; font-size: 16px;">
-                    ระบบรายงานนี้กำลังอยู่ในขั้นตอนการพัฒนา 
-                    และจะพร้อมใช้งานเร็วๆ นี้
-                </p>
-                <div style="
-                    background: #f8f9fa;
-                    padding: 25px;
-                    border-radius: 10px;
-                    max-width: 500px;
-                    margin: 0 auto;
-                ">
-                    <h4 style="color: #2c3e50; margin-bottom: 15px;">🎯 คุณสมบัติในอนาคต</h4>
-                    <ul style="margin: 0; padding-left: 20px; color: #666; line-height: 1.8; text-align: left;">
-                        <li>ดึงข้อมูลจาก Google Sheet แบบ Real-time</li>
-                        <li>กราฟแสดงสถิติแบบ Interactive</li>
-                        <li>ตัวกรองข้อมูลที่หลากหลาย</li>
-                        <li>ส่งออกรายงานหลายรูปแบบ</li>
-                        <li>ระบบ Dashboard สำหรับผู้บริหาร</li>
-                    </ul>
-                </div>
-            </div>
-        `;
-    },
-    
-    // Export to Excel
-    exportToExcel: function() {
-        this.showMessage('📤 กำลังเตรียมไฟล์ Excel...', 'info');
-        
-        // Simulate download
-        setTimeout(() => {
-            this.showMessage('✅ ดาวน์โหลดไฟล์ Excel สำเร็จ!', 'success');
+        // ✅ ฟังก์ชันแสดงสถานะ
+        window.showStatusMessage = function(type, message, duration = 3000) {
+            const container = document.getElementById('status-container');
+            if (!container) return;
             
-            // Create a dummy download link
-            const link = document.createElement('a');
-            link.href = '#'; // In real implementation, this would be the Excel file URL
-            link.download = `report_${this.currentReportType}_${new Date().toISOString().split('T')[0]}.xlsx`;
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }, 1500);
-    },
-    
-    // Reset all filters
-    resetFilters: function() {
-        this.setDefaultDates();
-        document.getElementById('dynamic-filters').innerHTML = '';
-        this.updateDynamicFilters();
-        this.showMessage('🔄 ล้างตัวกรองเรียบร้อย', 'info');
-    }
-};
-
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📊 Reports Page Loaded');
-    
-    // Add fadeOut animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(100%); }
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `status-message ${type}`;
+            messageDiv.textContent = message;
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, duration);
+        };
+        
+        // ✅ ฟังก์ชันแสดง loading
+        window.showLoading = function(show) {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) {
+                overlay.style.display = show ? 'flex' : 'none';
+            }
+        };
+        
+        // ✅ Auto-init ถ้าโหลดหน้าโดยตรง (ไม่ผ่าน SPA)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('📄 Reports page loaded directly (not SPA)');
+                // ถ้าโหลดโดยตรง ให้เรียก initReports ด้วย
+                setTimeout(() => {
+                    if (typeof window.initReports === 'function') {
+                        window.initReports();
+                    }
+                }, 100);
+            });
         }
-    `;
-    document.head.appendChild(style);
-    
-    // Initialize reports system
-    setTimeout(() => {
-        reports.init();
-        reports.updateDynamicFilters();
-    }, 500);
-});
-
-// Make reports available globally
-window.reports = reports;
-window.initReports = function() {
-    return reports.init();
-};
-</script>
+        
+        console.log('✅ Reports page ready (SPA mode)');
+    </script>
+</div>
